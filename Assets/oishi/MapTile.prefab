@@ -11,7 +11,6 @@ GameObject:
   - 33: {fileID: 3339830}
   - 64: {fileID: 6431742}
   - 23: {fileID: 2367382}
-  - 114: {fileID: 11449960}
   m_Layer: 0
   m_Name: MapTile
   m_TagString: MapTile
@@ -76,18 +75,6 @@ MeshCollider:
   serializedVersion: 2
   m_Convex: 0
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &11449960
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 196654}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3031b5124176ca34aae5f15f8cc59c23, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Facility_obj: {fileID: 0}
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

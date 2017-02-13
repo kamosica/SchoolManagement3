@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/oishi/GameScene.unity
+- path: Assets/oishi/oisitest.unity
   isLoaded: 1
   isActive: 1
