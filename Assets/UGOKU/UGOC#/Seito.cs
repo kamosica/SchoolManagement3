@@ -4,41 +4,41 @@ using System.Collections.Generic;//リストに必要
 
 public class Seito : MonoBehaviour
 {
-    NavMeshAgent agent;
-    //生徒の情報
-    public bool kokugo, sannsu, rika;
-    GameObject EVAobj;
+    NavMeshAgent agent;   
+    public bool kokugo, sannsu, rika;   //生徒の情報
+    GameObject EVAobj;  //マネージャーの読み込み
     EVA eva;
-    bool mokuteki;
-    int mokutekiNA;
-    public List<SenSei> senseiS = new List<SenSei>();
+    bool mokuteki;    //目的フラグ
+    int mokutekiNA;  //目的のオブジェクトの番号
+
     void Start()
     {
-        EVAobj = GameObject.Find("EVA");
+        EVAobj = GameObject.Find("EVA");//マネージャーの読み込み
         eva = EVAobj.GetComponent<EVA>();
 
         agent = GetComponent<NavMeshAgent>();
         mokuteki = false;
 
-        //senseiS.Add(eva.sensei[0]);
-
-        Debug.Log(eva.sensei[0].kokugo);
-
-        //for (int i = 0; i < 3; i++)
-        //{
-
-        //    if (eva.sensei[i] == kokugo)
-        //    {
-        //        //    Debug.Log("OK");
-        //        mokuteki = true;
-        //        mokutekiNA = i;
-        //    }
-        //}
     }
 
     void Update()
     {
+        for (int i = 0; i < eva.SenSeiobj.Length; i++)
+        {
+            if (    (eva.sensei[i].kokugo == kokugo && kokugo == true)
+                ||  (eva.sensei[i].sansu  == sannsu && sannsu == true)
+                ||  (eva.sensei[i].rika   == rika   && rika   == true))
+            {
+                mokuteki = true;
+                mokutekiNA = i;
+            }
+        }
+
         if (mokuteki == true)
-           agent.SetDestination(eva.SenSeiobj[mokutekiNA].transform.position);
+        {
+            Color senseiIRO = eva.SenSeiobj[mokutekiNA].GetComponent<Renderer>().material.color;
+            gameObject.GetComponent<Renderer>().material.color = senseiIRO;
+            agent.SetDestination(eva.SenSeiobj[mokutekiNA].transform.position);
+        }
     }
 }
