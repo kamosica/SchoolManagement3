@@ -3,12 +3,7 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags:
-<<<<<<< HEAD
-  - sensei
-=======
-  - Facility
->>>>>>> 3da3aca0a4294fe4d25d44e42b6a90d67b03d9e1
+  tags: []
   layers:
   - Default
   - TransparentFX
