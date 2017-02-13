@@ -39,12 +39,33 @@ public class FacilityPlacement : MonoBehaviour {
 
         if (Facility_obj != null && Facility_obj.tag == "Facility")
         {
+            Ray ray;
+            RaycastHit hit;
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject maptile = hit.collider.gameObject;
+
+                if (maptile.tag == "MapTile")
+                {
+                    Vector3 pos = maptile.transform.position;
+                    Facility_obj.transform.position = new Vector3(pos.x, pos.y + Facility_obj.transform.localScale.y / 2, pos.z);    // ワールド座標に変換されたマウス座標を代入
+
+                    Debug.Log(pos.y + Facility_obj.transform.localScale.y / 2);
+                }
+            }
+        }
+
+        /*if (Facility_obj != null && Facility_obj.tag == "Facility")
+        {
             float pos_Fy = Facility_obj.transform.position.y; //施設のオブジェクトのY座標を取得
             position = Input.mousePosition;    // Vector3でマウス位置座標を取得する
             position.z = 10.0f;      // Z軸修正
             screenToWorldPointPosition = Camera.main.ScreenToWorldPoint(position);     // マウス位置座標をスクリーン座標からワールド座標に変換する
             Facility_obj.transform.position = new Vector3(screenToWorldPointPosition.x, pos_Fy, screenToWorldPointPosition.z);    // ワールド座標に変換されたマウス座標を代入
-        }
+
+            //Debug.Log("X" + screenToWorldPointPosition.x + " Y" + screenToWorldPointPosition.y + " Z" + screenToWorldPointPosition.z);
+        }*/
 
     }
 }
