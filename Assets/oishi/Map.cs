@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿//大石健太
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;//リストに必要
 
@@ -19,7 +20,6 @@ public class Map : MonoBehaviour {
 
     public List<Facility> v_facility = new List<Facility>();
 
-	// Use this for initialization
 	void Start () {
 
         for(int y = 0;y < 10; y++)
@@ -36,16 +36,13 @@ public class Map : MonoBehaviour {
         Debug.Log(map_array[0, 0]);
 	
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
-
-
 
     }
 
     //マップの配列をデバックログで表示する関数
-    void Array_Log(){
+    public void Array_Log(){
         string print_array = "";
         for (int i = 0; i < map_array.GetLength(0); i++)
         {
