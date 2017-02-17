@@ -11,12 +11,13 @@ public class ButtonFacility : MonoBehaviour {
 
     public GameObject Facility_obj; //施設のオブジェクト
 
-    // Use this for initialization
+    public GameObject Map_obj;
+    Map Map_scr;
+
     void Start () {
-	
-	}
-	
-	// Update is called once per frame
+        Map_scr = Map_obj.GetComponent<Map>();
+    }
+
 	void Update () {
 	
 	}
@@ -30,7 +31,10 @@ public class ButtonFacility : MonoBehaviour {
         position.z = 10f;
         // マウス位置座標をスクリーン座標からワールド座標に変換する
         screenToWorldPointPosition = Camera.main.ScreenToWorldPoint(position);
-        Instantiate(Facility_obj, screenToWorldPointPosition, transform.rotation);
+        GameObject obj = (GameObject)Instantiate(Facility_obj, screenToWorldPointPosition, transform.rotation);
 
+        Facility facility = obj.GetComponent<Facility>();
+        facility.list_ID = Map_scr.facilityID;
+        Map_scr.facilityID++;
     }
 }

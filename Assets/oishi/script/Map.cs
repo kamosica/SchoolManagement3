@@ -5,7 +5,7 @@ using System.Collections.Generic;//リストに必要
 
 public class Map : MonoBehaviour {
 
-    public GameObject map_obj;
+    public GameObject map_obj;     //マップタイルのプレハブ
 
     public GameObject CsvManager_obj;
     CsvManager CsvManager_scr;
@@ -23,8 +23,9 @@ public class Map : MonoBehaviour {
 
     //public List<Facility> v_facility = new List<Facility>();
     public List<string[]> facility_list = new List<string[]>();
+    public int facilityID = 0;
 
-    public GameObject[] Facility_obj;
+    public GameObject[] Facility_obj;   //建物のオブジェクト
 
 	void Start () {
 
@@ -59,11 +60,12 @@ public class Map : MonoBehaviour {
 
         for (int i = 0; i < f_list.GetLength(0); i++)
         {
-            string[] str = new string[8];
+            string[] str = new string[9];
 
             for (int j = 0; j < f_list.GetLength(1); j++)
             {
-                str[j] = f_list[i, j];
+                if (j == f_list.GetLength(1) - 1) str[j] = i.ToString();    //listの最後の番号はFacilityIDなので読み込みの時に0からふり直す
+                else str[j] = f_list[i, j];
             }
 
             facility_list.Add(str);
@@ -100,7 +102,9 @@ public class Map : MonoBehaviour {
             facility_scr.position = position;
             facility_scr.RotateY = RotateY;
             facility_scr.size = size;
-            facility_scr.list_num = i;
+            facility_scr.list_ID = facilityID;
+
+            facilityID++;
         }
 
         Array_Log2();

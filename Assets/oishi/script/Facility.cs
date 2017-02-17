@@ -9,7 +9,7 @@ public class Facility : MonoBehaviour {
     public int RotateY;
     public Vector3 size;
 
-    public int list_num = -1;
+    public int list_ID = -1;
 
 	// Use this for initialization
 	void Start () {

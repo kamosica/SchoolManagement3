@@ -46,8 +46,7 @@ public class FacilityPlacement : MonoBehaviour {
 
                         Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0,Facility_obj); //マップリストを更新
 
-                        if(facility.list_num != -1)Map_scr.facility_list.RemoveAt(facility.list_num);//施設リストから選択した施設を削除
-                        facility.list_num = -1;
+                        if(facility.list_ID != -1)ID_Destroy(facility.list_ID);//施設リストから選択した施設を削除
                     }
                 }
                 else if(isSelect == true)//施設を選択しているとき
@@ -76,7 +75,7 @@ public class FacilityPlacement : MonoBehaviour {
                     Facility_obj = null;
                     isSelect = false;
 
-                    facility.list_num = Map_scr.facility_list.Count;
+                    //facility.list_num = Map_scr.facility_list.Count;
                     //Map_scr.v_facility.Add(facility);
 
                     string[] str = {    facility.Facility_Num.ToString(),   //施設番号
@@ -87,6 +86,7 @@ public class FacilityPlacement : MonoBehaviour {
                                         facility.size.x.ToString(),         //X方向の大きさ
                                         facility.size.y.ToString(),         //Y方向の大きさ
                                         facility.size.z.ToString(),         //Z方向の大きさ
+                                        facility.list_ID.ToString()         //建物ID
                                     };
                     Map_scr.facility_list.Add(str);
                     Map_scr.Array_Log2();
@@ -239,9 +239,25 @@ public class FacilityPlacement : MonoBehaviour {
         Facility facility = obj.GetComponent<Facility>();
         Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0,obj); //マップリストを更新
 
-        Debug.Log("list_num" + facility.list_num);
-        if (facility.list_num != -1) Map_scr.facility_list.RemoveAt(facility.list_num);//施設リストから選択した施設を削除
-        CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
+        Debug.Log("list_ID" + facility.list_ID);
+
+        if (facility.list_ID != -1) ID_Destroy(facility.list_ID);
+        //if (facility.list_ID != -1) Map_scr.facility_list.RemoveAt(facility.list_ID);//施設リストから選択した施設を削除
+        //CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
         Destroy(obj);
+    }
+
+    //建物リストから削除する処理
+    void ID_Destroy(int id)
+    {
+        for(int i = Map_scr.facility_list.Count - 1; i > -1;i--)
+        {
+            if(int.Parse(Map_scr.facility_list[i][8]) == id)
+            {
+                Debug.Log("ID" + id);
+                Map_scr.facility_list.RemoveAt(i);
+                CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
+            }
+        }
     }
 }
