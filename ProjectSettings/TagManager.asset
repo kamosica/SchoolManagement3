@@ -4,12 +4,7 @@
 TagManager:
   serializedVersion: 2
   tags:
-<<<<<<< HEAD
-  - sensei
-=======
   - MapTile
-  - Facility
->>>>>>> e2a146fe7f131c3775edd4aef7e82a1bb648aa94
   layers:
   - Default
   - TransparentFX

@@ -435,7 +435,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   map_obj: {fileID: 196654, guid: c2ef4edbb6cdf3f4182f944a3d830608, type: 2}
+  CsvManager_obj: {fileID: 1482348602}
   v_facility: []
+  Facility_obj:
+  - {fileID: 119188, guid: 5c40a40018ccd634e8048c992f84b97f, type: 2}
+  - {fileID: 194066, guid: 51b9308251e3e5d4589202b6025d4db5, type: 2}
 --- !u!4 &1003777644
 Transform:
   m_ObjectHideFlags: 0

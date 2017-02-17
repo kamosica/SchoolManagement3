@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.IO;
+using System.Collections.Generic;//リストに必要
 
 public class CsvManager : MonoBehaviour {
 
@@ -8,7 +9,7 @@ public class CsvManager : MonoBehaviour {
 
     void Start () {
 
-        CsvRead("sample");
+        //CsvRead("sample");
         //CsvWrite("test");
 
     }
@@ -18,7 +19,7 @@ public class CsvManager : MonoBehaviour {
 	}
 
     //CSVファイルの読み込み関数
-    public void CsvRead(string filename)
+    public string[,] CsvRead(string filename)
     {
         //テキストファイルの読み込み
         TextAsset _fieldTxt = Resources.Load("CSV/" + filename, typeof(TextAsset)) as TextAsset;
@@ -45,6 +46,8 @@ public class CsvManager : MonoBehaviour {
             }
         }
 
+        return _box;
+
         //Array_Log(_box);
     }
 
@@ -63,6 +66,29 @@ public class CsvManager : MonoBehaviour {
             {
                 if(j == array.GetLength(1) - 1) sw.Write(array[i, j] + "\n");
                 else sw.Write(array[i,j] + ",");
+            }
+        }
+
+        sw.Flush();
+        sw.Close();
+    }
+
+    public void CsvWrite(string filename, List<string[]> array)
+    {
+        StreamWriter sw;
+        FileInfo fi;
+        fi = new FileInfo("Assets/Resources/CSV/" + filename + ".csv");
+        //sw = fi.AppendText(); //追加書き込み
+        sw = fi.CreateText();   //新規書き込み
+
+        for (int i = 0; i < array.Count; i++)
+        {
+            string[] str = array[i];
+
+            for (int j = 0; j < str.Length ; j++)
+            {
+                if (j == str.Length - 1) sw.Write(str[j] + "\n");
+                else sw.Write(str[j] + ",");
             }
         }
 
