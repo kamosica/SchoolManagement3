@@ -1,6 +1,10 @@
 sceneSetups:
 <<<<<<< HEAD
+<<<<<<< HEAD
 - path: Assets/oishi/GameScene.unity
+=======
+- path: Assets/oishi/oisitest.unity
+>>>>>>> 29102a5d5eaf9534859003e0c56471f293d68b81
 =======
 - path: Assets/UGOKU/UGOK.unity
 >>>>>>> 2336588305b7503c141403b7f3fb6e885dd478f4
