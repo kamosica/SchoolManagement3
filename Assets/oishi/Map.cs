@@ -21,7 +21,7 @@ public class Map : MonoBehaviour {
                                     { 0,0,0,0,0,0,0,0,0,0},
                                     { 0,0,0,0,0,0,0,0,0,0}  };
 
-    public List<Facility> v_facility = new List<Facility>();
+    //public List<Facility> v_facility = new List<Facility>();
     public List<string[]> facility_list = new List<string[]>();
 
     public GameObject[] Facility_obj;
@@ -100,6 +100,7 @@ public class Map : MonoBehaviour {
             facility_scr.position = position;
             facility_scr.RotateY = RotateY;
             facility_scr.size = size;
+            facility_scr.list_num = i;
         }
 
         Array_Log2();
@@ -107,6 +108,23 @@ public class Map : MonoBehaviour {
     }
 
 	void Update () {
+
+        //デバック用　MapListとFacilityListの初期化
+        if(Input.GetKey(KeyCode.C))
+        {
+            for(int i = 0;i < 10;i++)
+            {
+                for(int j = 0;j < 10;j++)
+                {
+                    map_array[i, j] = 0;
+                }
+            }
+
+           facility_list.Clear();
+
+            CsvManager_scr.CsvWrite("MapList", map_array);
+            CsvManager_scr.CsvWrite("FacilityList", facility_list);
+        }
 
     }
 

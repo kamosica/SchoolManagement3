@@ -44,7 +44,10 @@ public class FacilityPlacement : MonoBehaviour {
 
                         Facility facility = Facility_obj.GetComponent<Facility>();
 
-                        Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0);
+                        Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0,Facility_obj); //マップリストを更新
+
+                        if(facility.list_num != -1)Map_scr.facility_list.RemoveAt(facility.list_num);//施設リストから選択した施設を削除
+                        facility.list_num = -1;
                     }
                 }
                 else if(isSelect == true)//施設を選択しているとき
@@ -67,13 +70,14 @@ public class FacilityPlacement : MonoBehaviour {
                     {
                         return;
                     }
-                    Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1);
+                    Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1,Facility_obj);
                     
                     Facility_obj.GetComponent<Renderer>().material.color = Color.white; //建物の色を白にする
                     Facility_obj = null;
                     isSelect = false;
 
-                    Map_scr.v_facility.Add(facility);
+                    facility.list_num = Map_scr.facility_list.Count;
+                    //Map_scr.v_facility.Add(facility);
 
                     string[] str = {    facility.Facility_Num.ToString(),   //施設番号
                                         facility.position.x.ToString(),     //X座標
@@ -90,7 +94,6 @@ public class FacilityPlacement : MonoBehaviour {
                 }
 
                 //Map_scr.Array_Log();
-                CsvManager_scr.CsvWrite("MapList",Map_scr.map_array);  //マップの情報をCSVに書き込む
             }
             else
             {
@@ -120,7 +123,7 @@ public class FacilityPlacement : MonoBehaviour {
                     else if (isSelect == false)//施設を選択していないとき
                     {
                         //施設を消す処理（仮）
-                        Destroy(obj);
+                        Facility_Destroy(obj);
                     }
                 }
             }
@@ -208,7 +211,7 @@ public class FacilityPlacement : MonoBehaviour {
     }
 
     //マップ配列を変更する関数
-    void Change_Maparray(int posx,int posz,int sizex,int sizez,int i)
+    void Change_Maparray(int posx,int posz,int sizex,int sizez,int i,GameObject obj)
     {
         if (posx == -100 && posz == -100) return;
 
@@ -216,15 +219,27 @@ public class FacilityPlacement : MonoBehaviour {
         {
             for(int z = 0;z < sizez;z++)
             {
-                if (Facility_obj.transform.localEulerAngles.y == 0 || Facility_obj.transform.localEulerAngles.y == 180)
+                if (obj.transform.localEulerAngles.y == 0 || obj.transform.localEulerAngles.y == 180)
                 {
                     Map_scr.map_array[posz + z, posx + x] = i;
                 }
-                else if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
+                else if (obj.transform.localEulerAngles.y == 90 || obj.transform.localEulerAngles.y == 270)
                 {
                     Map_scr.map_array[posz + x, posx + z] = i;
                 }
             }
         }
+
+        CsvManager_scr.CsvWrite("MapList", Map_scr.map_array);  //マップの情報をCSVに書き込む
+    }
+
+    //施設を消す処理
+    void Facility_Destroy(GameObject obj)
+    {
+        Facility facility = obj.GetComponent<Facility>();
+        Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0,obj); //マップリストを更新
+        if (facility.list_num != -1) Map_scr.facility_list.RemoveAt(facility.list_num);//施設リストから選択した施設を削除
+        CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
+        Destroy(obj);
     }
 }

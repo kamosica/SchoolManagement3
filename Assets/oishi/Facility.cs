@@ -9,6 +9,8 @@ public class Facility : MonoBehaviour {
     public int RotateY;
     public Vector3 size;
 
+    public int list_num = -1;
+
 	// Use this for initialization
 	void Start () {
         //position = new Vector3(-100, -100, -100);

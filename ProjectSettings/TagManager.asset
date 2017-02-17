@@ -4,11 +4,8 @@
 TagManager:
   serializedVersion: 2
   tags:
-<<<<<<< HEAD
   - MapTile
-=======
-  - tuki
->>>>>>> 2336588305b7503c141403b7f3fb6e885dd478f4
+  - Facility
   layers:
   - Default
   - TransparentFX
