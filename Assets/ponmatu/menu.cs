@@ -7,6 +7,7 @@ public class menu : MonoBehaviour {
     void Start()
     {
         ToolW = GameObject.Find("ToolWindow");
+        ToolW.GetComponent<Canvas>().enabled = false;
     }
 
     void OpenToolWindow()

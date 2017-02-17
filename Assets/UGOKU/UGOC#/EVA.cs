@@ -20,9 +20,13 @@ public class EVA : MonoBehaviour
         for (int i = 0; i < Sninzu; i++)
         {
             sensei.Add(SenSeiobj[i].GetComponent<SenSei>());//リストの格納
-            //hozonSensei[i] = sensei[i].kokugo;
         }
+
+        
+
     }
-    void Update() {
- }
+    void Update()
+    {
+
+    }
 }
