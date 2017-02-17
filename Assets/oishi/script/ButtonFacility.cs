@@ -30,7 +30,6 @@ public class ButtonFacility : MonoBehaviour {
         position.z = 10f;
         // マウス位置座標をスクリーン座標からワールド座標に変換する
         screenToWorldPointPosition = Camera.main.ScreenToWorldPoint(position);
-
         Instantiate(Facility_obj, screenToWorldPointPosition, transform.rotation);
 
     }

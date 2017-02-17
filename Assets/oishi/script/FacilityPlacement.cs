@@ -44,9 +44,10 @@ public class FacilityPlacement : MonoBehaviour {
 
                         Facility facility = Facility_obj.GetComponent<Facility>();
 
-                        Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0);
-                        //Vector3 pos = Facility_obj.transform.position;
-                        //Map_scr.map_array[(int)pos.z, (int)pos.x] = 0;
+                        Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0,Facility_obj); //マップリストを更新
+
+                        if(facility.list_num != -1)Map_scr.facility_list.RemoveAt(facility.list_num);//施設リストから選択した施設を削除
+                        facility.list_num = -1;
                     }
                 }
                 else if(isSelect == true)//施設を選択しているとき
@@ -69,18 +70,30 @@ public class FacilityPlacement : MonoBehaviour {
                     {
                         return;
                     }
-                    Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1);
+                    Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1,Facility_obj);
                     
-                    //Vector3 pos = Facility_obj.transform.position;
-                    //Map_scr.map_array[(int)pos.z, (int)pos.x] = 1;
-
                     Facility_obj.GetComponent<Renderer>().material.color = Color.white; //建物の色を白にする
                     Facility_obj = null;
                     isSelect = false;
+
+                    facility.list_num = Map_scr.facility_list.Count;
+                    //Map_scr.v_facility.Add(facility);
+
+                    string[] str = {    facility.Facility_Num.ToString(),   //施設番号
+                                        facility.position.x.ToString(),     //X座標
+                                        facility.position.y.ToString(),     //Y座標
+                                        facility.position.z.ToString(),     //Z座標
+                                        facility.RotateY.ToString(),        //Yの回転
+                                        facility.size.x.ToString(),         //X方向の大きさ
+                                        facility.size.y.ToString(),         //Y方向の大きさ
+                                        facility.size.z.ToString(),         //Z方向の大きさ
+                                    };
+                    Map_scr.facility_list.Add(str);
+                    Map_scr.Array_Log2();
+                    CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
                 }
 
-                Map_scr.Array_Log();
-                CsvManager_scr.CsvWrite("test",Map_scr.map_array);
+                //Map_scr.Array_Log();
             }
             else
             {
@@ -91,11 +104,11 @@ public class FacilityPlacement : MonoBehaviour {
         //右ボタンを押した時回転させる処理
         if (Input.GetMouseButtonDown(1))
         {
-            //施設を消す処理（仮）
+            
             Ray ray;
             RaycastHit hit;
             ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
             if (Physics.Raycast(ray, out hit, 100))
             {
                 GameObject obj = hit.collider.gameObject;
@@ -107,48 +120,17 @@ public class FacilityPlacement : MonoBehaviour {
                         Facility facility = Facility_obj.GetComponent<Facility>();
                         facility.RotateY = (int)Facility_obj.transform.localEulerAngles.y;
                     }
-                    else if (isSelect == false)
+                    else if (isSelect == false)//施設を選択していないとき
                     {
-                        Destroy(obj);
+                        //施設を消す処理（仮）
+                        Facility_Destroy(obj);
                     }
                 }
             }
         }
 
         //施設を移動させる処理
-        if (isSelect == true && Facility_obj != null && Facility_obj.tag == "Facility")
-        {
-            Ray ray;
-            RaycastHit hit;
-            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            if (Physics.Raycast(ray, out hit))
-            {
-                GameObject maptile = hit.collider.gameObject;
-
-                if (maptile.tag == "MapTile")
-                {
-                    Vector3 pos = maptile.transform.position;
-                    //Facility_obj.transform.position = new Vector3(pos.x, pos.y + Facility_obj.transform.localScale.y / 2, pos.z);
-
-                    Vector3 f_pos = new Vector3(0,0,0);
-                    if(Facility_obj.transform.localEulerAngles.y == 0 || Facility_obj.transform.localEulerAngles.y == 180)
-                    {
-                        Vector3 size = Facility_obj.transform.localScale;
-                        f_pos = new Vector3(pos.x + (size.x - 1) * 0.5f, pos.y + Facility_obj.transform.localScale.y / 2, pos.z + (size.z - 1) * 0.5f);
-                    }
-                    else if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
-                    {
-                        Vector3 size = Facility_obj.transform.localScale;
-                        f_pos = new Vector3(pos.x + (size.z - 1) * 0.5f, pos.y + Facility_obj.transform.localScale.y / 2, pos.z + (size.x - 1) * 0.5f);
-                    }
-
-                    Facility_obj.transform.position = f_pos;
-
-                    //Facility_obj.transform.position = new Vector3(pos.x + 1 + 0.5f, pos.y + Facility_obj.transform.localScale.y / 2, pos.z);
-                    //Debug.Log(pos.y + Facility_obj.transform.localScale.y / 2);
-                }
-            }
-        }
+        FacilityMove();
     }
 
     //建物を配置できるかどうかを判断する関数
@@ -190,8 +172,46 @@ public class FacilityPlacement : MonoBehaviour {
         return true;
     }
 
+    //施設を移動する関数
+    void FacilityMove()
+    {
+        if (isSelect == true && Facility_obj != null && Facility_obj.tag == "Facility")
+        {
+            Ray ray;
+            RaycastHit hit;
+            ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject maptile = hit.collider.gameObject;
+
+                if (maptile.tag == "MapTile")
+                {
+                    Vector3 pos = maptile.transform.position;
+                    //Facility_obj.transform.position = new Vector3(pos.x, pos.y + Facility_obj.transform.localScale.y / 2, pos.z);
+
+                    Vector3 f_pos = new Vector3(0, 0, 0);
+                    if (Facility_obj.transform.localEulerAngles.y == 0 || Facility_obj.transform.localEulerAngles.y == 180)
+                    {
+                        Vector3 size = Facility_obj.transform.localScale;
+                        f_pos = new Vector3(pos.x + (size.x - 1) * 0.5f, pos.y + Facility_obj.transform.localScale.y / 2, pos.z + (size.z - 1) * 0.5f);
+                    }
+                    else if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
+                    {
+                        Vector3 size = Facility_obj.transform.localScale;
+                        f_pos = new Vector3(pos.x + (size.z - 1) * 0.5f, pos.y + Facility_obj.transform.localScale.y / 2, pos.z + (size.x - 1) * 0.5f);
+                    }
+
+                    Facility_obj.transform.position = f_pos;
+
+                    //Facility_obj.transform.position = new Vector3(pos.x + 1 + 0.5f, pos.y + Facility_obj.transform.localScale.y / 2, pos.z);
+                    //Debug.Log(pos.y + Facility_obj.transform.localScale.y / 2);
+                }
+            }
+        }
+    }
+
     //マップ配列を変更する関数
-    void Change_Maparray(int posx,int posz,int sizex,int sizez,int i)
+    void Change_Maparray(int posx,int posz,int sizex,int sizez,int i,GameObject obj)
     {
         if (posx == -100 && posz == -100) return;
 
@@ -199,15 +219,29 @@ public class FacilityPlacement : MonoBehaviour {
         {
             for(int z = 0;z < sizez;z++)
             {
-                if (Facility_obj.transform.localEulerAngles.y == 0 || Facility_obj.transform.localEulerAngles.y == 180)
+                if (obj.transform.localEulerAngles.y == 0 || obj.transform.localEulerAngles.y == 180)
                 {
                     Map_scr.map_array[posz + z, posx + x] = i;
                 }
-                else if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
+                else if (obj.transform.localEulerAngles.y == 90 || obj.transform.localEulerAngles.y == 270)
                 {
                     Map_scr.map_array[posz + x, posx + z] = i;
                 }
             }
         }
+
+        CsvManager_scr.CsvWrite("MapList", Map_scr.map_array);  //マップの情報をCSVに書き込む
+    }
+
+    //施設を消す処理
+    void Facility_Destroy(GameObject obj)
+    {
+        Facility facility = obj.GetComponent<Facility>();
+        Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0,obj); //マップリストを更新
+
+        Debug.Log("list_num" + facility.list_num);
+        if (facility.list_num != -1) Map_scr.facility_list.RemoveAt(facility.list_num);//施設リストから選択した施設を削除
+        CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
+        Destroy(obj);
     }
 }

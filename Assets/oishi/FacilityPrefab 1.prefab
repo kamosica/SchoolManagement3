@@ -87,10 +87,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 75db9525e478b5f46802c6fb4711684e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  position: {x: 0, y: 0, z: 0}
+  Facility_Num: 2
+  position: {x: -100, y: -100, z: -100}
   RotateY: 0
   size: {x: 0, y: 0, z: 0}
-  Facility_Num: 0
+  list_num: -1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
