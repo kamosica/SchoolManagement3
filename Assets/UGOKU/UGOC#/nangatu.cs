@@ -16,16 +16,6 @@ public class nangatu : MonoBehaviour {
 	}
     void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log(collision);
-        Debug.Log(tuki[0]);
-        //if (collision == tuki[0])
-        //{
-        //    Debug.Log("ok");
-        //}
-        //else
-        //{
-        //    Debug.Log("NG");
-        //}
         for(int i = 0; i < 12; i++)
         {
             if (tuki[i].name == collision.name)
