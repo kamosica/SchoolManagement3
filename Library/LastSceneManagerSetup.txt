@@ -1,16 +1,4 @@
 sceneSetups:
-<<<<<<< HEAD
-- path: Assets/oishi/oisitest.unity
-=======
-<<<<<<< HEAD
-<<<<<<< HEAD
-- path: Assets/oishi/GameScene.unity
-=======
-- path: Assets/oishi/oisitest.unity
->>>>>>> 29102a5d5eaf9534859003e0c56471f293d68b81
-=======
-- path: Assets/UGOKU/UGOK.unity
->>>>>>> 2336588305b7503c141403b7f3fb6e885dd478f4
->>>>>>> d77dceeaf6db8b0246776955ae4083cec08776dd
+- path: Assets/PrototypeScene.unity
   isLoaded: 1
   isActive: 1

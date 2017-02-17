@@ -238,6 +238,8 @@ public class FacilityPlacement : MonoBehaviour {
     {
         Facility facility = obj.GetComponent<Facility>();
         Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0,obj); //マップリストを更新
+
+        Debug.Log("list_num" + facility.list_num);
         if (facility.list_num != -1) Map_scr.facility_list.RemoveAt(facility.list_num);//施設リストから選択した施設を削除
         CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
         Destroy(obj);
