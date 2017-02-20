@@ -6,6 +6,8 @@ TagManager:
   tags:
   - MapTile
   - Facility
+  - tuki
+  - Classroom
   layers:
   - Default
   - TransparentFX
