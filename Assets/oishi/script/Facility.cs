@@ -5,7 +5,7 @@ using System.Collections;
 public class Facility : MonoBehaviour {
 
     public int Facility_Num;
-    public Vector3 position;
+    public Vector3 position = new Vector3(-100,-100,-100);
     public int RotateY;
     public Vector3 size;
 
