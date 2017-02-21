@@ -8,6 +8,7 @@ TagManager:
   - Facility
   - tuki
   - Classroom
+  - RoomTile
   layers:
   - Default
   - TransparentFX

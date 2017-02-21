@@ -33,8 +33,11 @@ public class ButtonFacility : MonoBehaviour {
         screenToWorldPointPosition = Camera.main.ScreenToWorldPoint(position);
         GameObject obj = (GameObject)Instantiate(Facility_obj, screenToWorldPointPosition, transform.rotation);
 
-        Facility facility = obj.GetComponent<Facility>();
-        facility.list_ID = Map_scr.facilityID;
-        Map_scr.facilityID++;
+        if (obj.tag == "Facility")
+        {
+            Facility facility = obj.GetComponent<Facility>();
+            facility.list_ID = Map_scr.facilityID;
+            Map_scr.facilityID++;
+        }
     }
 }

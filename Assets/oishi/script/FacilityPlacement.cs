@@ -2,6 +2,7 @@
 //施設を配置するクラス
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;//リストに必要
 
 public class FacilityPlacement : MonoBehaviour {
 
@@ -14,6 +15,10 @@ public class FacilityPlacement : MonoBehaviour {
     Map Map_scr;
     public GameObject CsvManager_obj;
     CsvManager CsvManager_scr;
+
+    public GameObject Tile;
+
+    List<GameObject> v_RoomTile = new List<GameObject>();
 
     // Use this for initialization
     void Start () {
@@ -48,37 +53,67 @@ public class FacilityPlacement : MonoBehaviour {
 
                         if(facility.list_ID != -1)ID_Destroy(facility.list_ID);//施設リストから選択した施設を削除
                     }
+                    else if(Facility_obj.tag == "Classroom")
+                    {
+                        isSelect = true;
+
+                        Facility_obj.GetComponent<Renderer>().material.color = Color.blue;  //建物の色を青にする
+
+                        Classroom classroom = Facility_obj.GetComponent<Classroom>();
+
+                        Change_Maparray((int)classroom.position.x, (int)classroom.position.z, (int)classroom.size.x, (int)classroom.size.z, 0, Facility_obj); //マップリストを更新
+
+
+                        GameObject[] tagobjs = GameObject.FindGameObjectsWithTag("Classroom");  //Classroomのオブジェクトを探す
+                        for (int i = 0; i < tagobjs.Length; i++)
+                        {
+                            Vector3 pos = tagobjs[i].transform.position;
+                            Vector3 size = tagobjs[i].transform.localScale;
+
+                            float Y = (pos.y - size.y / 2) + 0.05f;
+
+                            GameObject obj1 = (GameObject)Instantiate(Tile, new Vector3(pos.x + size.x, Y, pos.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                            v_RoomTile.Add(obj1);
+                            GameObject obj2 = (GameObject)Instantiate(Tile, new Vector3(pos.x - size.x, Y, pos.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                            v_RoomTile.Add(obj2);
+                            GameObject obj3 = (GameObject)Instantiate(Tile, new Vector3(pos.x, Y, pos.z + size.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                            v_RoomTile.Add(obj3);
+                            GameObject obj4 = (GameObject)Instantiate(Tile, new Vector3(pos.x, Y, pos.z - size.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                            v_RoomTile.Add(obj4);
+                            GameObject obj5 = (GameObject)Instantiate(Tile, new Vector3(pos.x, Y + size.y, pos.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                            v_RoomTile.Add(obj5);
+                        }
+                    }
                 }
                 else if(isSelect == true)//施設を選択しているとき
                 {
-                    Facility facility = Facility_obj.GetComponent<Facility>();
-                    if (Facility_obj.transform.localEulerAngles.y == 0 || Facility_obj.transform.localEulerAngles.y == 180)
+                    if (Facility_obj.tag == "Facility")
                     {
-                        facility.position = new Vector3(Facility_obj.transform.position.x - (Facility_obj.transform.localScale.x / 2 - 0.5f),
-                                                        Facility_obj.transform.position.y,
-                                                        Facility_obj.transform.position.z - (Facility_obj.transform.localScale.z / 2 - 0.5f));
-                    }
-                    else if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
-                    {
-                        facility.position = new Vector3(Facility_obj.transform.position.x - (Facility_obj.transform.localScale.z / 2 - 0.5f),
-                                                        Facility_obj.transform.position.y,
-                                                        Facility_obj.transform.position.z - (Facility_obj.transform.localScale.x / 2 - 0.5f));
-                    }
+                        Facility facility = Facility_obj.GetComponent<Facility>();
+                        if (Facility_obj.transform.localEulerAngles.y == 0 || Facility_obj.transform.localEulerAngles.y == 180)
+                        {
+                            facility.position = new Vector3(Facility_obj.transform.position.x - (Facility_obj.transform.localScale.x / 2 - 0.5f),
+                                                            Facility_obj.transform.position.y,
+                                                            Facility_obj.transform.position.z - (Facility_obj.transform.localScale.z / 2 - 0.5f));
+                        }
+                        else if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
+                        {
+                            facility.position = new Vector3(Facility_obj.transform.position.x - (Facility_obj.transform.localScale.z / 2 - 0.5f),
+                                                            Facility_obj.transform.position.y,
+                                                            Facility_obj.transform.position.z - (Facility_obj.transform.localScale.x / 2 - 0.5f));
+                        }
 
-                    if (isDeploy_Facility((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1) == false)
-                    {
-                        return;
-                    }
-                    Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1,Facility_obj);
-                    
-                    Facility_obj.GetComponent<Renderer>().material.color = Color.white; //建物の色を白にする
-                    Facility_obj = null;
-                    isSelect = false;
+                        if (isDeploy_Facility((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1) == false)
+                        {
+                            return;
+                        }
+                        Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1, Facility_obj);
 
-                    //facility.list_num = Map_scr.facility_list.Count;
-                    //Map_scr.v_facility.Add(facility);
+                        Facility_obj.GetComponent<Renderer>().material.color = Color.white; //建物の色を白にする
+                        Facility_obj = null;
+                        isSelect = false;
 
-                    string[] str = {    facility.Facility_Num.ToString(),   //施設番号
+                        string[] str = {    facility.Facility_Num.ToString(),   //施設番号
                                         facility.position.x.ToString(),     //X座標
                                         facility.position.y.ToString(),     //Y座標
                                         facility.position.z.ToString(),     //Z座標
@@ -88,9 +123,44 @@ public class FacilityPlacement : MonoBehaviour {
                                         facility.size.z.ToString(),         //Z方向の大きさ
                                         facility.list_ID.ToString()         //建物ID
                                     };
-                    Map_scr.facility_list.Add(str);
-                    Map_scr.Array_Log2();
-                    CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
+                        Map_scr.facility_list.Add(str);
+                        Map_scr.Array_Log2();
+                        CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
+                    }
+                    else if (Facility_obj.tag == "Classroom")
+                    {
+                        Classroom facility = Facility_obj.GetComponent<Classroom>();
+                        if (Facility_obj.transform.localEulerAngles.y == 0 || Facility_obj.transform.localEulerAngles.y == 180)
+                        {
+                            facility.position = new Vector3(Facility_obj.transform.position.x - (Facility_obj.transform.localScale.x / 2 - 0.5f),
+                                                            Facility_obj.transform.position.y,
+                                                            Facility_obj.transform.position.z - (Facility_obj.transform.localScale.z / 2 - 0.5f));
+                        }
+                        else if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
+                        {
+                            facility.position = new Vector3(Facility_obj.transform.position.x - (Facility_obj.transform.localScale.z / 2 - 0.5f),
+                                                            Facility_obj.transform.position.y,
+                                                            Facility_obj.transform.position.z - (Facility_obj.transform.localScale.x / 2 - 0.5f));
+                        }
+
+                        //施設が配置できるかどうかの判断
+                        if (isDeploy_Facility((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1) == false)
+                        {
+                            return;
+                        }
+                        Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1, Facility_obj);
+
+                        Facility_obj.GetComponent<Renderer>().material.color = Color.white; //建物の色を白にする
+                        Facility_obj = null;
+                        isSelect = false;
+
+                        //RoomTileをすべて削除
+                        for(int i = v_RoomTile.Count - 1;i > -1;i--)
+                        {
+                            Destroy(v_RoomTile[i]);
+                        }
+                        v_RoomTile.Clear();
+                    }
                 }
 
                 //Map_scr.Array_Log();
@@ -154,7 +224,7 @@ public class FacilityPlacement : MonoBehaviour {
                     X = posx + z;
                 }
 
-                if((X < 0 || X > 9) || (Z < 0 || Z > 9))    //配列の範囲外だったらfalse
+                if((X < 0 || X > Map_scr.Map_LengthX - 1) || (Z < 0 || Z > Map_scr.Map_LengthY - 1))    //配列の範囲外だったらfalse
                 {
                     Debug.Log("範囲外です　置けないよ");
                     return false;
@@ -175,7 +245,7 @@ public class FacilityPlacement : MonoBehaviour {
     //施設を移動する関数
     void FacilityMove()
     {
-        if (isSelect == true && Facility_obj != null && Facility_obj.tag == "Facility")
+        if (isSelect == true && Facility_obj != null && (Facility_obj.tag == "Facility" || Facility_obj.tag == "Classroom"))
         {
             Ray ray;
             RaycastHit hit;
@@ -205,6 +275,24 @@ public class FacilityPlacement : MonoBehaviour {
 
                     //Facility_obj.transform.position = new Vector3(pos.x + 1 + 0.5f, pos.y + Facility_obj.transform.localScale.y / 2, pos.z);
                     //Debug.Log(pos.y + Facility_obj.transform.localScale.y / 2);
+                }
+                else if(maptile.tag == "RoomTile")
+                {
+                    Vector3 pos = maptile.transform.position;
+
+                    Vector3 f_pos = new Vector3(0, 0, 0);
+                    if (Facility_obj.transform.localEulerAngles.y == 0 || Facility_obj.transform.localEulerAngles.y == 180)
+                    {
+                        Vector3 size = Facility_obj.transform.localScale;
+                        f_pos = new Vector3(pos.x + (size.x - 1) * 0.5f, pos.y + Facility_obj.transform.localScale.y / 2 - 0.05f, pos.z + (size.z - 1) * 0.5f);
+                    }
+                    else if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
+                    {
+                        Vector3 size = Facility_obj.transform.localScale;
+                        f_pos = new Vector3(pos.x + (size.z - 1) * 0.5f, pos.y + Facility_obj.transform.localScale.y / 2 - 0.05f, pos.z + (size.x - 1) * 0.5f);
+                    }
+
+                    Facility_obj.transform.position = f_pos;
                 }
             }
         }

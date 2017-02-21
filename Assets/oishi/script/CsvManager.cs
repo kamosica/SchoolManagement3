@@ -6,6 +6,9 @@ using System.Collections.Generic;//リストに必要
 public class CsvManager : MonoBehaviour {
 
     //string[,] _box;
+    public int LengthX;
+    public int LengthY;
+
 
     void Start () {
 
@@ -30,8 +33,8 @@ public class CsvManager : MonoBehaviour {
         string[] _fieldString = _fieldTxt.text.Split(_kugiri);  //行を配列に格納
         string[] _sizeX = _fieldString[0].Split(',');
 
-        int LengthY = _fieldString.Length - 1;  //Y方向の配列の長さ
-        int LengthX = _sizeX.Length;            //X方向の配列の長さ
+        LengthY = _fieldString.Length - 1;  //Y方向の配列の長さ
+        LengthX = _sizeX.Length;            //X方向の配列の長さ
 
         string[,] _box = new string[LengthY, LengthX];
 

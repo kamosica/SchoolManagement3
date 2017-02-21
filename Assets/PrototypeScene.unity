@@ -1326,6 +1326,7 @@ MonoBehaviour:
   Facility_obj: {fileID: 0}
   Map_obj: {fileID: 1003777641}
   CsvManager_obj: {fileID: 1482348602}
+  Tile: {fileID: 127424, guid: 1313dd18fb8fa5243b028a463eeb627c, type: 2}
 --- !u!114 &1003777643
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1339,6 +1340,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   map_obj: {fileID: 196654, guid: c2ef4edbb6cdf3f4182f944a3d830608, type: 2}
   CsvManager_obj: {fileID: 1482348602}
+  Map_LengthX: 0
+  Map_LengthY: 0
   facilityID: 0
   Facility_obj:
   - {fileID: 119188, guid: 5c40a40018ccd634e8048c992f84b97f, type: 2}
@@ -1690,6 +1693,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce397284bee876c469d09bf882fd74d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LengthX: 0
+  LengthY: 0
 --- !u!4 &1482348604
 Transform:
   m_ObjectHideFlags: 0
