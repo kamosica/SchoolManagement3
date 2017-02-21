@@ -20,6 +20,9 @@ public class Map : MonoBehaviour {
 
     public GameObject[] Facility_obj;   //建物のオブジェクト
 
+    public List<string[]> classroom_list = new List<string[]>();
+    public int classroomID = 0;
+
 	void Start () {
         CsvManager_scr = CsvManager_obj.GetComponent<CsvManager>();
 

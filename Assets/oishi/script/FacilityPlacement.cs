@@ -63,10 +63,13 @@ public class FacilityPlacement : MonoBehaviour {
 
                         Change_Maparray((int)classroom.position.x, (int)classroom.position.z, (int)classroom.size.x, (int)classroom.size.z, 0, Facility_obj); //マップリストを更新
 
+                        
 
                         GameObject[] tagobjs = GameObject.FindGameObjectsWithTag("Classroom");  //Classroomのオブジェクトを探す
                         for (int i = 0; i < tagobjs.Length; i++)
                         {
+                            if (tagobjs[i] == Facility_obj) continue;
+
                             Vector3 pos = tagobjs[i].transform.position;
                             Vector3 size = tagobjs[i].transform.localScale;
 
@@ -114,14 +117,14 @@ public class FacilityPlacement : MonoBehaviour {
                         isSelect = false;
 
                         string[] str = {    facility.Facility_Num.ToString(),   //施設番号
-                                        facility.position.x.ToString(),     //X座標
-                                        facility.position.y.ToString(),     //Y座標
-                                        facility.position.z.ToString(),     //Z座標
-                                        facility.RotateY.ToString(),        //Yの回転
-                                        facility.size.x.ToString(),         //X方向の大きさ
-                                        facility.size.y.ToString(),         //Y方向の大きさ
-                                        facility.size.z.ToString(),         //Z方向の大きさ
-                                        facility.list_ID.ToString()         //建物ID
+                                            facility.position.x.ToString(),     //X座標
+                                            facility.position.y.ToString(),     //Y座標
+                                            facility.position.z.ToString(),     //Z座標
+                                            facility.RotateY.ToString(),        //Yの回転
+                                            facility.size.x.ToString(),         //X方向の大きさ
+                                            facility.size.y.ToString(),         //Y方向の大きさ
+                                            facility.size.z.ToString(),         //Z方向の大きさ
+                                            facility.list_ID.ToString()         //建物ID
                                     };
                         Map_scr.facility_list.Add(str);
                         Map_scr.Array_Log2();
@@ -163,7 +166,7 @@ public class FacilityPlacement : MonoBehaviour {
                     }
                 }
 
-                //Map_scr.Array_Log();
+                Map_scr.Array_Log();
             }
             else
             {
@@ -302,6 +305,9 @@ public class FacilityPlacement : MonoBehaviour {
     void Change_Maparray(int posx,int posz,int sizex,int sizez,int i,GameObject obj)
     {
         if (posx == -100 && posz == -100) return;
+
+        Debug.Log("pX" + posx  + " pZ" + posz );
+        Debug.Log("sX" + sizex + " sZ" + sizez);
 
         for (int x = 0; x < sizex; x++)
         {

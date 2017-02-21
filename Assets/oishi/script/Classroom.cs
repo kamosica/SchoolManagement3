@@ -12,8 +12,8 @@ public class Classroom : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-	
-	}
+        size = transform.localScale;
+    }
 	
 	// Update is called once per frame
 	void Update () {
