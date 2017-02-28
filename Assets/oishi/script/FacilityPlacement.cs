@@ -55,6 +55,8 @@ public class FacilityPlacement : MonoBehaviour {
                     }
                     else if(Facility_obj.tag == "Classroom")
                     {
+                        if(isOnClassroom(Facility_obj.transform.position,Facility_obj.transform.localScale))return; //上に教室が乗っているかを調べる
+
                         isSelect = true;
 
                         Facility_obj.GetComponent<Renderer>().material.color = Color.blue;  //建物の色を青にする
@@ -63,28 +65,49 @@ public class FacilityPlacement : MonoBehaviour {
 
                         Change_Maparray((int)classroom.position.x, (int)classroom.position.z, (int)classroom.size.x, (int)classroom.size.z, 0, Facility_obj); //マップリストを更新
 
-                        
+                        if (classroom.list_ID != -1) clID_Destroy(classroom.list_ID);//施設リストから選択した施設を削除
 
                         GameObject[] tagobjs = GameObject.FindGameObjectsWithTag("Classroom");  //Classroomのオブジェクトを探す
                         for (int i = 0; i < tagobjs.Length; i++)
                         {
                             if (tagobjs[i] == Facility_obj) continue;
 
-                            Vector3 pos = tagobjs[i].transform.position;
-                            Vector3 size = tagobjs[i].transform.localScale;
+                            Classroom cl = tagobjs[i].GetComponent<Classroom>();
+                            
+
+                            Vector3 pos = cl.position;
+
+                            Vector3 size = cl.size;
+                            if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
+                            {
+                                size = new Vector3(cl.size.z,cl.size.y,cl.size.x);
+                            }
 
                             float Y = (pos.y - size.y / 2) + 0.05f;
 
-                            GameObject obj1 = (GameObject)Instantiate(Tile, new Vector3(pos.x + size.x, Y, pos.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                            v_RoomTile.Add(obj1);
-                            GameObject obj2 = (GameObject)Instantiate(Tile, new Vector3(pos.x - size.x, Y, pos.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                            v_RoomTile.Add(obj2);
-                            GameObject obj3 = (GameObject)Instantiate(Tile, new Vector3(pos.x, Y, pos.z + size.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                            v_RoomTile.Add(obj3);
-                            GameObject obj4 = (GameObject)Instantiate(Tile, new Vector3(pos.x, Y, pos.z - size.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                            v_RoomTile.Add(obj4);
-                            GameObject obj5 = (GameObject)Instantiate(Tile, new Vector3(pos.x, Y + size.y, pos.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                            v_RoomTile.Add(obj5);
+                            for(int x = 0;x < size.z;x++)
+                            {
+                                GameObject obj1 = (GameObject)Instantiate(Tile, new Vector3(pos.x + size.x, Y, pos.z + x), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                                v_RoomTile.Add(obj1);
+                                GameObject obj2 = (GameObject)Instantiate(Tile, new Vector3(pos.x - 1, Y, pos.z + x), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                                v_RoomTile.Add(obj2);
+                            }
+                            for (int z = 0; z < size.x; z++)
+                            {
+                                GameObject obj3 = (GameObject)Instantiate(Tile, new Vector3(pos.x + z, Y, pos.z + size.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                                v_RoomTile.Add(obj3);
+                                GameObject obj4 = (GameObject)Instantiate(Tile, new Vector3(pos.x + z, Y, pos.z - 1), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                                v_RoomTile.Add(obj4);
+                            }
+
+                            for (int x = 0; x < size.x; x++)
+                            {
+                                for (int z = 0; z < size.z; z++)
+                                {
+                                    GameObject obj5 = (GameObject)Instantiate(Tile, new Vector3(pos.x + x, Y + size.y, pos.z + z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                                    v_RoomTile.Add(obj5);
+                                }
+                            }
                         }
                     }
                 }
@@ -110,6 +133,8 @@ public class FacilityPlacement : MonoBehaviour {
                         {
                             return;
                         }
+                        //教室がほかのオブジェクトと重なっていたら配置できない
+                        if (facility.isHit == true) return;
                         Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1, Facility_obj);
 
                         Facility_obj.GetComponent<Renderer>().material.color = Color.white; //建物の色を白にする
@@ -151,7 +176,10 @@ public class FacilityPlacement : MonoBehaviour {
                         {
                             return;
                         }
-                        Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1, Facility_obj);
+
+                        //教室がほかのオブジェクトと重なっていたら配置できない
+                        if (facility.isHit == true) return;
+                        //Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1, Facility_obj); //Map配列を変える
 
                         Facility_obj.GetComponent<Renderer>().material.color = Color.white; //建物の色を白にする
                         Facility_obj = null;
@@ -163,6 +191,20 @@ public class FacilityPlacement : MonoBehaviour {
                             Destroy(v_RoomTile[i]);
                         }
                         v_RoomTile.Clear();
+
+                        string[] str = {    facility.Facility_Num.ToString(),   //施設番号
+                                            facility.position.x.ToString(),     //X座標
+                                            facility.position.y.ToString(),     //Y座標
+                                            facility.position.z.ToString(),     //Z座標
+                                            facility.RotateY.ToString(),        //Yの回転
+                                            facility.size.x.ToString(),         //X方向の大きさ
+                                            facility.size.y.ToString(),         //Y方向の大きさ
+                                            facility.size.z.ToString(),         //Z方向の大きさ
+                                            facility.list_ID.ToString()         //建物ID
+                                    };
+                        Map_scr.classroom_list.Add(str);
+                        //Map_scr.Array_Log2();
+                        CsvManager_scr.CsvWrite("ClassroomList", Map_scr.classroom_list);
                     }
                 }
 
@@ -199,6 +241,21 @@ public class FacilityPlacement : MonoBehaviour {
                         Facility_Destroy(obj);
                     }
                 }
+                else if (obj.tag == "Classroom")
+                {
+                    if (isSelect == true)//施設を選択しているとき
+                    {
+                        Facility_obj.transform.Rotate(new Vector3(0f, 90f, 0f));//施設を回転させる
+                        Classroom classroom = Facility_obj.GetComponent<Classroom>();
+                        classroom.RotateY = (int)Facility_obj.transform.localEulerAngles.y;
+                    }
+                    else if (isSelect == false)//施設を選択していないとき
+                    {
+                        if (isOnClassroom(Facility_obj.transform.position, Facility_obj.transform.localScale)) return; //上に教室が乗っているかを調べる
+                        //施設を消す処理（仮）
+                        Classroom_Destroy(obj);
+                    }
+                }
             }
         }
 
@@ -233,12 +290,12 @@ public class FacilityPlacement : MonoBehaviour {
                     return false;
                 }
 
-                mapnum = Map_scr.map_array[Z, X];
-                if (mapnum == 1) //マップ配列に1があったときはすでにほかの施設が設置させれているのでfalse
-                {
-                    Debug.Log("他の建物と被っています　置けないよ");
-                    return false;
-                }
+                //mapnum = Map_scr.map_array[Z, X];
+                //if (mapnum == 1) //マップ配列に1があったときはすでにほかの施設が設置させれているのでfalse
+                //{
+                //    Debug.Log("他の建物と被っています　置けないよ");
+                //    return false;
+                //}
             }
         }
 
@@ -306,8 +363,8 @@ public class FacilityPlacement : MonoBehaviour {
     {
         if (posx == -100 && posz == -100) return;
 
-        Debug.Log("pX" + posx  + " pZ" + posz );
-        Debug.Log("sX" + sizex + " sZ" + sizez);
+        //Debug.Log("pX" + posx  + " pZ" + posz );
+        //Debug.Log("sX" + sizex + " sZ" + sizez);
 
         for (int x = 0; x < sizex; x++)
         {
@@ -336,8 +393,18 @@ public class FacilityPlacement : MonoBehaviour {
         Debug.Log("list_ID" + facility.list_ID);
 
         if (facility.list_ID != -1) ID_Destroy(facility.list_ID);
-        //if (facility.list_ID != -1) Map_scr.facility_list.RemoveAt(facility.list_ID);//施設リストから選択した施設を削除
-        //CsvManager_scr.CsvWrite("FacilityList", Map_scr.facility_list);
+        Destroy(obj);
+    }
+
+    //教室を消す処理
+    void Classroom_Destroy(GameObject obj)
+    {
+        Classroom classroom = obj.GetComponent<Classroom>();
+        //Change_Maparray((int)classroom.position.x, (int)classroom.position.z, (int)classroom.size.x, (int)classroom.size.z, 0, obj); //マップリストを更新
+
+        Debug.Log("list_ID" + classroom.list_ID);
+
+        if (classroom.list_ID != -1) clID_Destroy(classroom.list_ID);
         Destroy(obj);
     }
 
@@ -354,4 +421,32 @@ public class FacilityPlacement : MonoBehaviour {
             }
         }
     }
+
+    //教室リストから削除する処理
+    void clID_Destroy(int id)
+    {
+        for (int i = Map_scr.classroom_list.Count - 1; i > -1; i--)
+        {
+            if (int.Parse(Map_scr.classroom_list[i][8]) == id)
+            {
+                //Debug.Log("ID" + id);
+                Map_scr.classroom_list.RemoveAt(i);
+                CsvManager_scr.CsvWrite("ClassroomList", Map_scr.classroom_list);
+            }
+        }
+    }
+
+    //教室が上に載っているかを調べる処理
+    bool isOnClassroom(Vector3 pos,Vector3 scale)
+    {
+        var isHit = Physics.BoxCast (pos, scale * 0.5f, Vector3.up,transform.rotation,1);
+
+        if(isHit)
+        {
+            Debug.Log("上に載っているよ");
+            return true;
+        }
+
+        return false;
+     }
 }

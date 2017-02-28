@@ -10,9 +10,10 @@ public class Facility : MonoBehaviour {
     public Vector3 size;
 
     public int list_ID = -1;
+    public bool isHit = false;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         //position = new Vector3(-100, -100, -100);
         //RotateY = 0;
         size = transform.localScale;
@@ -22,4 +23,18 @@ public class Facility : MonoBehaviour {
 	void Update () {
 	
 	}
+    //オブジェクトが衝突した時
+    void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "RoomTile" || other.tag == "MapTile") return;
+        isHit = true;
+        Debug.Log("Facility Enter");
+    }
+    //オブジェクトが離れたとき
+    void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "RoomTile" || other.tag == "MapTile") return;
+        isHit = false;
+        Debug.Log("Facility Exit");
+    }
 }

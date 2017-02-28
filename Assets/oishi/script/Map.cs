@@ -11,24 +11,30 @@ public class Map : MonoBehaviour {
     CsvManager CsvManager_scr;
 
     public int[,] map_array;
+
+    public int[,,] map_array3d; //3次元配列　[マップの奥行 ,マップの横幅 ,マップの高さ]
+
     public int Map_LengthX;
     public int Map_LengthY;
+    public int Map_Height = 10; //マップの高さ
 
     //public List<Facility> v_facility = new List<Facility>();
     public List<string[]> facility_list = new List<string[]>();
     public int facilityID = 0;
-
     public GameObject[] Facility_obj;   //建物のオブジェクト
 
     public List<string[]> classroom_list = new List<string[]>();
     public int classroomID = 0;
+    public GameObject[] Classroom_obj;   //教室のオブジェクト
 
-	void Start () {
+    void Start () {
         CsvManager_scr = CsvManager_obj.GetComponent<CsvManager>();
 
         map_arrayLoad();        //マップの読み込み
 
         f_listLoad();//建物の読み込み
+
+        classroom_listLoad();   //教室の読み込み
     }
 
 	void Update () {
@@ -44,9 +50,11 @@ public class Map : MonoBehaviour {
             }
 
            facility_list.Clear();
+           classroom_list.Clear();
 
-            CsvManager_scr.CsvWrite("MapList", map_array);
-            CsvManager_scr.CsvWrite("FacilityList", facility_list);
+           CsvManager_scr.CsvWrite("MapList", map_array);
+           CsvManager_scr.CsvWrite("FacilityList", facility_list);
+           CsvManager_scr.CsvWrite("ClassroomList", classroom_list);
         }
     }
 
@@ -76,6 +84,20 @@ public class Map : MonoBehaviour {
             for (int j = 0; j < m_list.GetLength(1); j++)
             {
                 map_array[i, j] = int.Parse(m_list[i, j]);
+            }
+        }
+
+        //3dマップの初期化
+        map_array3d = new int[Map_LengthY, Map_LengthX,Map_Height];
+
+        for (int i = 0; i < Map_LengthY; i++)
+        {
+            for (int j = 0; j < Map_LengthX; j++)
+            {
+                for (int h = 0; h < Map_Height; h++)
+                {
+                    map_array3d[i, j, h] = 0;
+                }
             }
         }
 
@@ -134,6 +156,63 @@ public class Map : MonoBehaviour {
             facility_scr.list_ID = facilityID;
 
             facilityID++;
+        }
+
+        Array_Log2();
+    }
+
+    //教室のロード
+    void classroom_listLoad()
+    {
+        string[,] cl_list = CsvManager_scr.CsvRead("ClassroomList");
+
+        for (int i = 0; i < cl_list.GetLength(0); i++)
+        {
+            string[] str = new string[9];
+
+            for (int j = 0; j < cl_list.GetLength(1); j++)
+            {
+                if (j == cl_list.GetLength(1) - 1) str[j] = i.ToString();    //listの最後の番号はFacilityIDなので読み込みの時に0からふり直す
+                else str[j] = cl_list[i, j];
+            }
+
+            classroom_list.Add(str);
+        }
+
+        for (int i = 0; i < classroom_list.Count; i++)
+        {
+            string[] f_scr = classroom_list[i];
+
+            int Facility_Num = int.Parse(f_scr[0]);
+            Vector3 position = new Vector3(float.Parse(f_scr[1]), float.Parse(f_scr[2]), float.Parse(f_scr[3]));
+            int RotateY = int.Parse(f_scr[4]);
+            Vector3 size = new Vector3(float.Parse(f_scr[5]), float.Parse(f_scr[6]), float.Parse(f_scr[7]));
+
+            GameObject obj = null;
+            if (RotateY == 0 || RotateY == 180)
+            {
+                obj = (GameObject)Instantiate
+                        (Classroom_obj[Facility_Num - 1],
+                            new Vector3(position.x + (size.x / 2 - 0.5f), position.y, position.z + (size.z / 2 - 0.5f)),
+                            Quaternion.Euler(0.0f, RotateY, 0.0f)
+                        );
+            }
+            else if (RotateY == 90 || RotateY == 270)
+            {
+                obj = (GameObject)Instantiate
+                        (Classroom_obj[Facility_Num - 1],
+                            new Vector3(position.x + (size.z / 2 - 0.5f), position.y, position.z + (size.x / 2 - 0.5f)),
+                            Quaternion.Euler(0.0f, RotateY, 0.0f)
+                        );
+            }
+            Classroom facility_scr = obj.GetComponent<Classroom>();
+            facility_scr.Facility_Num = Facility_Num;
+            facility_scr.position = position;
+            facility_scr.RotateY = RotateY;
+            facility_scr.size = size;
+            facility_scr.list_ID = classroomID;
+
+            classroomID++;
         }
 
         Array_Log2();

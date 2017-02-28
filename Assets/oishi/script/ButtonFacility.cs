@@ -39,5 +39,11 @@ public class ButtonFacility : MonoBehaviour {
             facility.list_ID = Map_scr.facilityID;
             Map_scr.facilityID++;
         }
+        else if (obj.tag == "Classroom")
+        {
+            Classroom classroom = obj.GetComponent<Classroom>();
+            classroom.list_ID = Map_scr.classroomID;
+            Map_scr.classroomID++;
+        }
     }
 }
