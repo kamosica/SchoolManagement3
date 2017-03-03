@@ -15,6 +15,8 @@ public class FacilityPlacement : MonoBehaviour {
     Map Map_scr;
     public GameObject CsvManager_obj;
     CsvManager CsvManager_scr;
+    public GameObject ParameterManager_obj;
+    SchoolParameter ParameterManager_scr;
 
     public GameObject Tile;
 
@@ -23,8 +25,9 @@ public class FacilityPlacement : MonoBehaviour {
     // Use this for initialization
     void Start () {
         Map_scr = Map_obj.GetComponent<Map>();
-        CsvManager_scr = CsvManager_obj.GetComponent<CsvManager>();	
-	}
+        CsvManager_scr = CsvManager_obj.GetComponent<CsvManager>();
+        ParameterManager_scr = ParameterManager_obj.GetComponent<SchoolParameter>();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -44,71 +47,28 @@ public class FacilityPlacement : MonoBehaviour {
                     if (Facility_obj.tag == "Facility")
                     {
                         isSelect = true;
-
                         Facility_obj.GetComponent<Renderer>().material.color = Color.blue;  //建物の色を青にする
-
                         Facility facility = Facility_obj.GetComponent<Facility>();
 
                         Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 0,Facility_obj); //マップリストを更新
 
                         if(facility.list_ID != -1)ID_Destroy(facility.list_ID);//施設リストから選択した施設を削除
+                        ParameterManager_scr.Parameter_Change(Facility_obj, -1); //パラメータの変更
                     }
                     else if(Facility_obj.tag == "Classroom")
                     {
                         if(isOnClassroom(Facility_obj.transform.position,Facility_obj.transform.localScale))return; //上に教室が乗っているかを調べる
 
                         isSelect = true;
-
                         Facility_obj.GetComponent<Renderer>().material.color = Color.blue;  //建物の色を青にする
-
                         Classroom classroom = Facility_obj.GetComponent<Classroom>();
 
                         Change_Maparray((int)classroom.position.x, (int)classroom.position.z, (int)classroom.size.x, (int)classroom.size.z, 0, Facility_obj); //マップリストを更新
 
                         if (classroom.list_ID != -1) clID_Destroy(classroom.list_ID);//施設リストから選択した施設を削除
+                        ParameterManager_scr.Parameter_Change(Facility_obj, -1); //パラメータの変更
 
-                        GameObject[] tagobjs = GameObject.FindGameObjectsWithTag("Classroom");  //Classroomのオブジェクトを探す
-                        for (int i = 0; i < tagobjs.Length; i++)
-                        {
-                            if (tagobjs[i] == Facility_obj) continue;
-
-                            Classroom cl = tagobjs[i].GetComponent<Classroom>();
-                            
-
-                            Vector3 pos = cl.position;
-
-                            Vector3 size = cl.size;
-                            if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
-                            {
-                                size = new Vector3(cl.size.z,cl.size.y,cl.size.x);
-                            }
-
-                            float Y = (pos.y - size.y / 2) + 0.05f;
-
-                            for(int x = 0;x < size.z;x++)
-                            {
-                                GameObject obj1 = (GameObject)Instantiate(Tile, new Vector3(pos.x + size.x, Y, pos.z + x), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                                v_RoomTile.Add(obj1);
-                                GameObject obj2 = (GameObject)Instantiate(Tile, new Vector3(pos.x - 1, Y, pos.z + x), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                                v_RoomTile.Add(obj2);
-                            }
-                            for (int z = 0; z < size.x; z++)
-                            {
-                                GameObject obj3 = (GameObject)Instantiate(Tile, new Vector3(pos.x + z, Y, pos.z + size.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                                v_RoomTile.Add(obj3);
-                                GameObject obj4 = (GameObject)Instantiate(Tile, new Vector3(pos.x + z, Y, pos.z - 1), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                                v_RoomTile.Add(obj4);
-                            }
-
-                            for (int x = 0; x < size.x; x++)
-                            {
-                                for (int z = 0; z < size.z; z++)
-                                {
-                                    GameObject obj5 = (GameObject)Instantiate(Tile, new Vector3(pos.x + x, Y + size.y, pos.z + z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                                    v_RoomTile.Add(obj5);
-                                }
-                            }
-                        }
+                        Create_ClassroomTile();     //教室を配置するときにすでに置いてある教室の上や横に教室を配置できるようにタイルを生成する
                     }
                 }
                 else if(isSelect == true)//施設を選択しているとき
@@ -136,6 +96,8 @@ public class FacilityPlacement : MonoBehaviour {
                         //教室がほかのオブジェクトと重なっていたら配置できない
                         if (facility.isHit == true) return;
                         Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1, Facility_obj);
+
+                        ParameterManager_scr.Parameter_Change(Facility_obj, 1); //パラメータの変更
 
                         Facility_obj.GetComponent<Renderer>().material.color = Color.white; //建物の色を白にする
                         Facility_obj = null;
@@ -180,6 +142,7 @@ public class FacilityPlacement : MonoBehaviour {
                         //教室がほかのオブジェクトと重なっていたら配置できない
                         if (facility.isHit == true) return;
                         //Change_Maparray((int)facility.position.x, (int)facility.position.z, (int)facility.size.x, (int)facility.size.z, 1, Facility_obj); //Map配列を変える
+                        ParameterManager_scr.Parameter_Change(Facility_obj, 1); //パラメータの変更
 
                         Facility_obj.GetComponent<Renderer>().material.color = Color.white; //建物の色を白にする
                         Facility_obj = null;
@@ -251,7 +214,7 @@ public class FacilityPlacement : MonoBehaviour {
                     }
                     else if (isSelect == false)//施設を選択していないとき
                     {
-                        if (isOnClassroom(Facility_obj.transform.position, Facility_obj.transform.localScale)) return; //上に教室が乗っているかを調べる
+                        if (isOnClassroom(obj.transform.position, obj.transform.localScale)) return; //上に教室が乗っているかを調べる
                         //施設を消す処理（仮）
                         Classroom_Destroy(obj);
                     }
@@ -446,7 +409,59 @@ public class FacilityPlacement : MonoBehaviour {
             Debug.Log("上に載っているよ");
             return true;
         }
-
         return false;
      }
+
+    //教室を配置するときにすでに置いてある教室の上や横に教室を配置できるようにタイルを生成する
+    void Create_ClassroomTile()
+    {
+        GameObject[] tagobjs = GameObject.FindGameObjectsWithTag("Classroom");  //Classroomのオブジェクトを探す
+        for (int i = 0; i < tagobjs.Length; i++)
+        {
+            if (tagobjs[i] == Facility_obj) continue;
+
+            Classroom cl = tagobjs[i].GetComponent<Classroom>();
+
+
+            Vector3 pos = cl.position;
+
+            Vector3 size = cl.size;
+            if (Facility_obj.transform.localEulerAngles.y == 90 || Facility_obj.transform.localEulerAngles.y == 270)
+            {
+                size = new Vector3(cl.size.z, cl.size.y, cl.size.x);
+            }
+
+            float Y = (pos.y - size.y / 2) + 0.05f;
+
+            for (int x = 0; x < size.z; x++)
+            {
+                GameObject obj1 = (GameObject)Instantiate(Tile, new Vector3(pos.x + size.x, Y, pos.z + x), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                v_RoomTile.Add(obj1);
+                GameObject obj2 = (GameObject)Instantiate(Tile, new Vector3(pos.x - 1, Y, pos.z + x), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                v_RoomTile.Add(obj2);
+            }
+            for (int z = 0; z < size.x; z++)
+            {
+                GameObject obj3 = (GameObject)Instantiate(Tile, new Vector3(pos.x + z, Y, pos.z + size.z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                v_RoomTile.Add(obj3);
+                GameObject obj4 = (GameObject)Instantiate(Tile, new Vector3(pos.x + z, Y, pos.z - 1), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                v_RoomTile.Add(obj4);
+            }
+
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int z = 0; z < size.z; z++)
+                {
+                    GameObject obj5 = (GameObject)Instantiate(Tile, new Vector3(pos.x + x, Y + size.y, pos.z + z), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                    v_RoomTile.Add(obj5);
+                }
+            }
+        }
+    }
+
+    //ボタンを押したらオブジェクトを選択する関数
+    public void set_isSelect(bool flg)
+    {
+        isSelect = flg;
+    }
 }

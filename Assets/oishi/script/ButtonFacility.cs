@@ -14,8 +14,11 @@ public class ButtonFacility : MonoBehaviour {
     public GameObject Map_obj;
     Map Map_scr;
 
+    FacilityPlacement facilityplacement_scr;
+
     void Start () {
         Map_scr = Map_obj.GetComponent<Map>();
+        facilityplacement_scr = Map_obj.GetComponent<FacilityPlacement>();
     }
 
 	void Update () {
@@ -45,5 +48,9 @@ public class ButtonFacility : MonoBehaviour {
             classroom.list_ID = Map_scr.classroomID;
             Map_scr.classroomID++;
         }
+
+        obj.GetComponent<Renderer>().material.color = Color.blue;
+        facilityplacement_scr.Facility_obj = obj;
+        facilityplacement_scr.set_isSelect(true);
     }
 }

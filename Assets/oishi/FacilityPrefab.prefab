@@ -109,6 +109,13 @@ MonoBehaviour:
   size: {x: 0, y: 0, z: 0}
   list_ID: -1
   isHit: 0
+  s_gakuryoku: 2
+  s_undou: 1
+  s_bunka: 3
+  m_sutoresu: 5
+  m_hirou: 2
+  f_tian: 12
+  f_seiketudo: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
