@@ -11,6 +11,7 @@ GameObject:
   - 33: {fileID: 3313756}
   - 65: {fileID: 6537574}
   - 23: {fileID: 2391270}
+  - 114: {fileID: 11460900}
   m_Layer: 0
   m_Name: ComaKing
   m_TagString: Coma
@@ -75,6 +76,21 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &11460900
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 144192}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c918e8a20cd95794dabed582008af06d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PalyerNo: 0
+  ComaNo: 0
+  position: {x: 0, y: 0}
+  isCrush: 0
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
