@@ -1,43 +1,43 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &119188
+--- !u!1 &196874
 GameObject:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 4
   m_Component:
-  - 4: {fileID: 485526}
-  - 33: {fileID: 3399822}
-  - 65: {fileID: 6530902}
-  - 23: {fileID: 2330452}
-  - 114: {fileID: 11429138}
-  - 54: {fileID: 5486428}
+  - 4: {fileID: 453280}
+  - 33: {fileID: 3329990}
+  - 65: {fileID: 6579998}
+  - 23: {fileID: 2341418}
+  - 114: {fileID: 11438300}
+  - 54: {fileID: 5450578}
   m_Layer: 0
-  m_Name: FacilityPrefab
-  m_TagString: Facility
+  m_Name: Classroom2
+  m_TagString: Classroom
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &485526
+--- !u!4 &453280
 Transform:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119188}
+  m_GameObject: {fileID: 196874}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.5, y: 0.5, z: 0}
-  m_LocalScale: {x: 2, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 3, y: 1, z: 3}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
---- !u!23 &2330452
+--- !u!23 &2341418
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119188}
+  m_GameObject: {fileID: 196874}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -58,19 +58,19 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingOrder: 0
---- !u!33 &3399822
+--- !u!33 &3329990
 MeshFilter:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119188}
+  m_GameObject: {fileID: 196874}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!54 &5486428
+--- !u!54 &5450578
 Rigidbody:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119188}
+  m_GameObject: {fileID: 196874}
   serializedVersion: 2
   m_Mass: 1
   m_Drag: 0
@@ -80,42 +80,35 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!65 &6530902
+--- !u!65 &6579998
 BoxCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119188}
+  m_GameObject: {fileID: 196874}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.9, z: 0.9}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &11429138
+--- !u!114 &11438300
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 119188}
+  m_GameObject: {fileID: 196874}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75db9525e478b5f46802c6fb4711684e, type: 3}
+  m_Script: {fileID: 11500000, guid: a903a5b798724e44a94d7d179cd005d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Facility_Num: 1
+  Facility_Num: 2
   position: {x: -100, y: -100, z: -100}
   RotateY: 0
   size: {x: 0, y: 0, z: 0}
   list_ID: -1
   isHit: 0
-  s_gakuryoku: 2
-  s_undou: 1
-  s_bunka: 3
-  m_sutoresu: 5
-  m_hirou: 2
-  f_tian: 12
-  f_seiketudo: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1
@@ -125,5 +118,5 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 119188}
+  m_RootGameObject: {fileID: 196874}
   m_IsPrefabParent: 1
