@@ -3,7 +3,7 @@ using System.Collections;
 
 public class ChessMap : MonoBehaviour {
 
-    public int[,] Map_array;
+    public int[,] Map_array; //マップ配列
 
     int Map_width = 3 * 2 + 1;
     int Map_height = 8 * 2 + 1;

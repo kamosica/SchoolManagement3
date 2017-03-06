@@ -9,6 +9,7 @@ TagManager:
   - tuki
   - Classroom
   - RoomTile
+  - Coma
   layers:
   - Default
   - TransparentFX
