@@ -6,17 +6,17 @@ public class ChessMap : MonoBehaviour {
     public int[,] Map_array = { { 0, 0, 0, 0, 0, 0, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 },
-                                { 0, 2, 0, 3, 0, 2, 0 },
+                                { 0, 22, 0, 23, 0, 22, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 },
-                                { 0, 1, 0, 1, 0, 1, 0 },
-                                { 0, 0, 0, 0, 0, 0, 0 },
-                                { 0, 0, 0, 0, 0, 0, 0 },
+                                { 0, 21, 0, 21, 0, 21, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 },
-                                { 0, 1, 0, 1, 0, 1, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 },
-                                { 0, 2, 0, 3, 0, 2, 0 },
+                                { 0, 0, 0, 0, 0, 0, 0 },
+                                { 0, 11, 0, 11, 0, 11, 0 },
+                                { 0, 0, 0, 0, 0, 0, 0 },
+                                { 0, 12, 0, 13, 0, 12, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 },
                                 { 0, 0, 0, 0, 0, 0, 0 }}; //マップ配列
@@ -63,17 +63,32 @@ public class ChessMap : MonoBehaviour {
 
                 //Map_array[i,j] = 0;
 
-                if (Map_array[i,j] == 1)
+                if (Map_array[i,j] % 10 == 1)
                 {
-                    Instantiate(Coma_1, new Vector3(width, 0.5f, height), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                    GameObject obj = (GameObject)Instantiate(Coma_1, new Vector3(width, 0.5f, height), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                    Coma coma = obj.GetComponent<Coma>();
+                    coma.PalyerNo = Map_array[i, j] / 10;
+                    coma.ComaNo = Map_array[i, j] % 10;
+                    coma.position = new Vector2(j, i);
+                    coma.isCrush = false;
                 }
-                else if (Map_array[i, j] == 2)
+                else if (Map_array[i, j] % 10 == 2)
                 {
-                    Instantiate(Coma_2, new Vector3(width, 0.5f, height), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                    GameObject obj = (GameObject)Instantiate(Coma_2, new Vector3(width, 0.5f, height), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                    Coma coma = obj.GetComponent<Coma>();
+                    coma.PalyerNo = Map_array[i, j] / 10;
+                    coma.ComaNo = Map_array[i, j] % 10;
+                    coma.position = new Vector2(j, i);
+                    coma.isCrush = false;
                 }
-                else if (Map_array[i, j] == 3)
+                else if (Map_array[i, j] % 10 == 3)
                 {
-                    Instantiate(Coma_King, new Vector3(width, 0.5f, height), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                    GameObject obj = (GameObject)Instantiate(Coma_King, new Vector3(width, 0.5f, height), Quaternion.Euler(0.0f, 0.0f, 0.0f));
+                    Coma coma = obj.GetComponent<Coma>();
+                    coma.PalyerNo = Map_array[i, j] / 10;
+                    coma.ComaNo = Map_array[i, j] % 10;
+                    coma.position = new Vector2(j, i);
+                    coma.isCrush = false;
                 }
 
                 width += map_interval;
