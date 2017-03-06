@@ -778,6 +778,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1422923344}
   - 114: {fileID: 1422923343}
+  - 114: {fileID: 1422923345}
   m_Layer: 0
   m_Name: MapGenerator
   m_TagString: Untagged
@@ -814,6 +815,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
+--- !u!114 &1422923345
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1422923342}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9eb1d63af19b0b4683c4612076b25a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clickMAP: {fileID: 0}
+  clickCUBE: {fileID: 0}
+  MapGeneOBJ: {fileID: 1422923342}
 --- !u!1001 &1562990270
 Prefab:
   m_ObjectHideFlags: 0
