@@ -11,6 +11,7 @@ TagManager:
   - RoomTile
   - Coma
   - Maptile
+  - SentakuMap
   layers:
   - Default
   - TransparentFX

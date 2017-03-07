@@ -88,7 +88,7 @@ public class ChessMap : MonoBehaviour {
                     coma.PalyerNo = Map_array[i, j] / 10;
                     coma.ComaNo = Map_array[i, j] % 10;
                     coma.position = new Vector2(j, i);
-                    coma.isCrush = false;
+                    coma.isCrush = true;
                 }
 
                 width += map_interval;
