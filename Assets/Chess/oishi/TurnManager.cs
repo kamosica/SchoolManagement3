@@ -21,6 +21,8 @@ public class TurnManager: MonoBehaviour {
 	void Start () {
         turn_t = Turn_Text.GetComponent<Text>();
         turn2_t = Turn2_Text.GetComponent<Text>();
+
+        //Create_EndPanel(2);
     }
 	
 	// Update is called once per frame
@@ -89,5 +91,10 @@ public class TurnManager: MonoBehaviour {
     public void Push_ContinueButton()
     {
         SceneManager.LoadScene("Chess");
+    }
+
+    public void Push_TitleButton()
+    {
+        SceneManager.LoadScene("Title");
     }
 }
