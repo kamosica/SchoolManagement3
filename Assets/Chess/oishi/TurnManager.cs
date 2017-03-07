@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class TurnManager: MonoBehaviour {
 
@@ -12,6 +13,9 @@ public class TurnManager: MonoBehaviour {
 
     bool isfirst = true;   //true 先行　false 後攻
     int turn_count = 0;
+
+    public GameObject EndPanel;
+    public GameObject EndText;
 
 	// Use this for initialization
 	void Start () {
@@ -47,6 +51,7 @@ public class TurnManager: MonoBehaviour {
         Change_Color();
     }
 
+    //ターンが変わったら自分のコマのアルファ値を変える
     void Change_Color()
     {
         GameObject[] tagobjs = GameObject.FindGameObjectsWithTag("Coma");
@@ -57,13 +62,32 @@ public class TurnManager: MonoBehaviour {
             
             if(coma.PalyerNo - 1 == turn_count % 2)
             {
-                tagobjs[i].GetComponent<Renderer>().material.color = Color.blue;
+                Color coma_color = tagobjs[i].GetComponent<Renderer>().material.color;
+                coma_color = new Color(coma_color.r, coma_color.g, coma_color.b, 1.0f);
+                tagobjs[i].GetComponent<Renderer>().material.color = coma_color;
             }
             else
             {
-                tagobjs[i].GetComponent<Renderer>().material.color = Color.white;
+                Color coma_color = tagobjs[i].GetComponent<Renderer>().material.color;
+                coma_color = new Color(coma_color.r, coma_color.g, coma_color.b, 0.7f);
+                tagobjs[i].GetComponent<Renderer>().material.color = coma_color;
             }
         }
+    }
 
+    //勝利文字の表示
+    public void Create_EndPanel(int PlayerNo)
+    {
+        EndPanel.SetActive(true);
+
+        Text endtext = EndText.GetComponent<Text>();
+
+        if (PlayerNo == 1) endtext.text = "先攻の勝利";
+        else if (PlayerNo == 2) endtext.text = "後攻の勝利";
+    }
+
+    public void Push_ContinueButton()
+    {
+        SceneManager.LoadScene("Chess");
     }
 }

@@ -100,9 +100,8 @@ public class ChessMap : MonoBehaviour {
             height += map_interval;
         }
 
-
-        
-	}
+        Array_Log();
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -113,4 +112,20 @@ public class ChessMap : MonoBehaviour {
     {
 
     }
+
+    public void Array_Log()
+    {
+        string print_array = "";
+        for (int i = 0; i < Map_array.GetLength(0); i++)
+        {
+            for (int j = 0; j < Map_array.GetLength(1); j++)
+            {
+                print_array += Map_array[i, j].ToString() + ":";
+            }
+            print_array += "\n";
+        }
+
+        Debug.Log(print_array);
+    }
+
 }
