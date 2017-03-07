@@ -23,8 +23,6 @@ public class Coma : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        this.transform.localScale 
-
         //if (alfa == 0.0f) alfaflg = false;
         //else if (alfa == 1.0f) alfaflg = true;
 
