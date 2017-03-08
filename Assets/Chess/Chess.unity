@@ -641,7 +641,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &757241209
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1225,8 +1225,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 1422923344}
   - 114: {fileID: 1422923343}
-  - 114: {fileID: 1422923345}
-  - 114: {fileID: 1422923346}
   - 114: {fileID: 1422923347}
   m_Layer: 0
   m_Name: MapGenerator
@@ -1264,38 +1262,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 4
---- !u!114 &1422923345
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1422923342}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9eb1d63af19b0b4683c4612076b25a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MapTile: {fileID: 156922, guid: c0bb170744ba4844c8f409112541b1f5, type: 2}
-  MapTile2: {fileID: 120544, guid: d7dd9aad098a23c4fbaa44192d57ea63, type: 2}
-  MapTile3: {fileID: 102644, guid: c7db9359f2e060847af3849b664d6e4e, type: 2}
-  clickMAP: {fileID: 0}
-  clickCUBE: {fileID: 0}
---- !u!114 &1422923346
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1422923342}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 789a1334055a449408407a0ca98508c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MapTile: {fileID: 156922, guid: c0bb170744ba4844c8f409112541b1f5, type: 2}
-  MapTile2: {fileID: 120544, guid: d7dd9aad098a23c4fbaa44192d57ea63, type: 2}
-  MapTile3: {fileID: 102644, guid: c7db9359f2e060847af3849b664d6e4e, type: 2}
-  clickMAP: {fileID: 0}
-  clickCUBE: {fileID: 0}
 --- !u!114 &1422923347
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1308,10 +1274,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MapTile: {fileID: 130252, guid: 2221d4ee47d88dc4b91e7597c3aaa404, type: 2}
-  MapTile2: {fileID: 0}
+  MapTile2: {fileID: 153390, guid: 62ace7222264c154ba927671a2b96a8f, type: 2}
   MapTile3: {fileID: 0}
   clickMAP: {fileID: 0}
   clickCUBE: {fileID: 0}
+  TurnManager_obj: {fileID: 1851480417}
 --- !u!1 &1851480417
 GameObject:
   m_ObjectHideFlags: 0
@@ -1399,6 +1366,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Turn_Text: {fileID: 1851480417}
   Turn2_Text: {fileID: 1880606357}
+  turn_count: 0
   EndPanel: {fileID: 692328761}
   EndText: {fileID: 406031809}
 --- !u!1 &1880606357

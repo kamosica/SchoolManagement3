@@ -12,7 +12,7 @@ public class TurnManager: MonoBehaviour {
     Text turn2_t;
 
     bool isfirst = true;   //true 先行　false 後攻
-    int turn_count = 0;
+    public int turn_count = 0;
 
     public GameObject EndPanel;
     public GameObject EndText;
@@ -22,6 +22,7 @@ public class TurnManager: MonoBehaviour {
         turn_t = Turn_Text.GetComponent<Text>();
         turn2_t = Turn2_Text.GetComponent<Text>();
 
+        Change_Color();
         //Create_EndPanel(2);
     }
 	
@@ -84,8 +85,8 @@ public class TurnManager: MonoBehaviour {
 
         Text endtext = EndText.GetComponent<Text>();
 
-        if (PlayerNo == 1) endtext.text = "先攻の勝利";
-        else if (PlayerNo == 2) endtext.text = "後攻の勝利";
+        if (PlayerNo == 1) endtext.text = "後攻の勝利";
+        else if (PlayerNo == 2) endtext.text = "先攻の勝利";
     }
 
     public void Push_ContinueButton()
