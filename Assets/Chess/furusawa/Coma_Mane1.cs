@@ -19,8 +19,8 @@ public class Coma_Mane1: MonoBehaviour
     public GameObject TurnManager_obj;
     TurnManager TurnManager_scr;
 
-    GameObject BeforeCUBE;
-    int BeforeMove = 0;
+    GameObject BeforeCUBE;  //前に行動したのコマを保存
+    int BeforeMove = 0;     //前に移動した方向の保存 　1.右　2.左  3.上　4.下
 
     int KoudouCount = 0;    //何回行動したかのカウント
 
@@ -44,9 +44,9 @@ public class Coma_Mane1: MonoBehaviour
             if (komasentaku == false)//コマを選択してるか
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))//ビーム
+                    {
                 {
                     if (hit.collider.gameObject.tag == ("Coma"))//タグがコマで
-                    {
                         clickCUBE = hit.collider.gameObject;//クリックしたオブジェクト
                         coma = clickCUBE.GetComponent<Coma>();
 
@@ -117,10 +117,7 @@ public class Coma_Mane1: MonoBehaviour
 
                             chessmap.Map_array[(int)comapos.y, (int)comapos.x] = 0;
 
-                            Destroy(PanelMIGI);//周りのパネルの削除
-                            Destroy(PanelHIDARI);
-                            Destroy(PanelSITA);
-                            Destroy(PanelUE);
+                            Destroy_SentakuMap();
                         }
 
                         //駒が壁の時
@@ -132,17 +129,14 @@ public class Coma_Mane1: MonoBehaviour
                         KoudouCount++;
                         if(KoudouCount == 2)
                         {
-                            TurnManager_scr.Change_Text();
+                            TurnManager_scr.Change_Text();  //ターン切り替えの処理
                             KoudouCount = 0;
                         }
                         komasentaku = false;
                     }
                     else if(hit.collider.gameObject == clickCUBE)
                     {
-                        Destroy(PanelMIGI);//周りのパネルの削除
-                        Destroy(PanelHIDARI);
-                        Destroy(PanelSITA);
-                        Destroy(PanelUE);
+                        Destroy_SentakuMap();
 
                         clickCUBE = null;
                     }
@@ -160,11 +154,7 @@ public class Coma_Mane1: MonoBehaviour
 
     void Create_SentakuMap()
     {
-        GameObject[] tagobjs = GameObject.FindGameObjectsWithTag("SentakuMap");
-        for (int i = 0; i < tagobjs.Length; i++)
-        {
-            Destroy(tagobjs[i]);
-        }
+        Destroy_SentakuMap();
 
         coma = clickCUBE.GetComponent<Coma>();
         comapos = coma.position;
@@ -176,16 +166,24 @@ public class Coma_Mane1: MonoBehaviour
         {
             //周りのコマチェック。行ける所にオブジェクトが出る
             if (chessmap.Map_array[(int)comapos.y, (int)comapos.x + 1] == 0 && comapos.x + 1 < 6 && BeforeMove != 1)//右
+            {
                 PanelMIGI = (GameObject)Instantiate(MapTile, new Vector3(((int)comapos.x + 2) * interval, 1, (int)comapos.y * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+            }
 
             if (chessmap.Map_array[(int)comapos.y, (int)comapos.x - 1] == 0 && comapos.x - 1 > 0 && BeforeMove != 2)//左
+            {
                 PanelHIDARI = (GameObject)Instantiate(MapTile, new Vector3(((int)comapos.x - 2) * interval, 1, (int)comapos.y * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+            }
 
             if (chessmap.Map_array[(int)comapos.y + 1, (int)comapos.x] == 0 && comapos.y + 1 < 16 && BeforeMove != 3)//上
+            {
                 PanelUE = (GameObject)Instantiate(MapTile, new Vector3((int)comapos.x * interval, 1, ((int)comapos.y + 2) * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+            }
 
             if (chessmap.Map_array[(int)comapos.y - 1, (int)comapos.x] == 0 && comapos.y - 1 > 0 && BeforeMove != 4)//下
+            {
                 PanelSITA = (GameObject)Instantiate(MapTile, new Vector3((int)comapos.x * interval, 1, ((int)comapos.y - 2) * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+            }
 
             komasentaku = true;//選択した
         }
@@ -271,6 +269,7 @@ public class Coma_Mane1: MonoBehaviour
 
         c_scr.isCrush = true;
 
+        //勝利判定
         if(c_scr.ComaNo == 3)
         {
             TurnManager_scr.Create_EndPanel(c_scr.PalyerNo);
@@ -314,34 +313,18 @@ public class Coma_Mane1: MonoBehaviour
     //駒が壁の時
     void CrushComaMove(Vector2 pos, GameObject coma_obj)
     {
+        Vector2[] vec = { new Vector2(1, 1), new Vector2(-1, 1), new Vector2(1, -1), new Vector2(-1, -1) };
+
         if (coma_obj.transform.localEulerAngles.y == 0 || coma_obj.transform.localEulerAngles.y == 180)
         {
-            if (isRange(pos.x + 1, pos.y + 1) == true)
+            for(int i = 0;i < 4;i++)
             {
-                if (chessmap.Map_array[(int)pos.y + 1, (int)pos.x + 1] == 0)
+                if (isRange(pos.x + vec[i].x, pos.y + vec[i].y) == true)
                 {
-                    Instantiate(MapTile2, new Vector3(((int)pos.x + 1) * interval, 1, ((int)pos.y + 1) * interval), Quaternion.Euler(90.0f, 90.0f, 0.0f));
-                }
-            }
-            if (isRange(pos.x - 1, pos.y + 1) == true)
-            {
-                if (chessmap.Map_array[(int)pos.y + 1, (int)pos.x - 1] == 0)
-                {
-                    Instantiate(MapTile2, new Vector3(((int)pos.x - 1) * interval, 1, ((int)pos.y + 1) * interval), Quaternion.Euler(90.0f, 90.0f, 0.0f));
-                }
-            }
-            if (isRange(pos.x + 1, pos.y - 1) == true)
-            {
-                if (chessmap.Map_array[(int)pos.y - 1, (int)pos.x + 1] == 0)
-                {
-                    Instantiate(MapTile2, new Vector3(((int)pos.x + 1) * interval, 1, ((int)pos.y - 1) * interval), Quaternion.Euler(90.0f, 90.0f, 0.0f));
-                }
-            }
-            if (isRange(pos.x - 1, pos.y - 1) == true)
-            {
-                if (chessmap.Map_array[(int)pos.y - 1, (int)pos.x - 1] == 0)
-                {
-                    Instantiate(MapTile2, new Vector3(((int)pos.x - 1) * interval, 1, ((int)pos.y - 1) * interval), Quaternion.Euler(90.0f, 90.0f, 0.0f));
+                    if (chessmap.Map_array[(int)(pos.y + vec[i].y), (int)(pos.x + vec[i].x)] == 0)
+                    {
+                        Instantiate(MapTile2, new Vector3(((int)pos.x + vec[i].x) * interval, 1, ((int)pos.y + vec[i].y) * interval), Quaternion.Euler(90.0f, 90.0f, 0.0f));
+                    }
                 }
             }
 
@@ -363,32 +346,14 @@ public class Coma_Mane1: MonoBehaviour
         }
         else if (coma_obj.transform.localEulerAngles.y == 90 || coma_obj.transform.localEulerAngles.y == 270)
         {
-            if (isRange(pos.x + 1, pos.y + 1) == true)
+            for (int i = 0; i < 4; i++)
             {
-                if (chessmap.Map_array[(int)pos.y + 1, (int)pos.x + 1] == 0)
+                if (isRange(pos.x + vec[i].x, pos.y + vec[i].y) == true)
                 {
-                    Instantiate(MapTile2, new Vector3(((int)pos.x + 1) * interval, 1, ((int)pos.y + 1) * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                }
-            }
-            if (isRange(pos.x - 1, pos.y + 1) == true)
-            {
-                if (chessmap.Map_array[(int)pos.y + 1, (int)pos.x - 1] == 0)
-                {
-                    Instantiate(MapTile2, new Vector3(((int)pos.x - 1) * interval, 1, ((int)pos.y + 1) * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                }
-            }
-            if (isRange(pos.x + 1, pos.y - 1) == true)
-            {
-                if (chessmap.Map_array[(int)pos.y - 1, (int)pos.x + 1] == 0)
-                {
-                    Instantiate(MapTile2, new Vector3(((int)pos.x + 1) * interval, 1, ((int)pos.y - 1) * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
-                }
-            }
-            if (isRange(pos.x - 1, pos.y - 1) == true)
-            {
-                if (chessmap.Map_array[(int)pos.y - 1, (int)pos.x - 1] == 0)
-                {
-                    Instantiate(MapTile2, new Vector3(((int)pos.x - 1) * interval, 1, ((int)pos.y - 1) * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                    if (chessmap.Map_array[(int)(pos.y + vec[i].y), (int)(pos.x + vec[i].x)] == 0)
+                    {
+                        Instantiate(MapTile2, new Vector3(((int)pos.x + vec[i].x) * interval, 1, ((int)pos.y + vec[i].y) * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
+                    }
                 }
             }
 
@@ -410,12 +375,11 @@ public class Coma_Mane1: MonoBehaviour
         }
     }
 
-    //パネルを選択したとき駒を移動する処理
+    //パネルを選択したとき壁を移動する処理
     void CrushComaMove2(Vector3 tilepos)
     {
         int coma_number = coma.PalyerNo * 10 + coma.ComaNo;
 
-        //Debug.Log("タイルの座標　X" + tilepos.x + "　Y" + tilepos.z);
         //Debug.Log("タイルの座標　X" + Mathf.RoundToInt(tilepos.x / 0.7f) + "　Y" + Mathf.RoundToInt(tilepos.z / 0.7f));
 
         chessmap.Map_array[(int)coma.position.y, (int)coma.position.x] = 0;
@@ -424,11 +388,7 @@ public class Coma_Mane1: MonoBehaviour
 
         //Debug.Log("ComaPosition X" + coma.position.x + " Y" + coma.position.y);
 
-        GameObject[] tagobjs = GameObject.FindGameObjectsWithTag("SentakuMap");
-        for (int i = 0; i < tagobjs.Length; i++)
-        {
-            Destroy(tagobjs[i]);
-        }
+        Destroy_SentakuMap();
 
         if ((int)coma.position.x % 2 == 0 && (int)coma.position.y % 2 == 1)
         {
@@ -439,6 +399,16 @@ public class Coma_Mane1: MonoBehaviour
         {
             Debug.Log("回転９０");
             clickCUBE.transform.rotation = Quaternion.Euler(0, 90, 0);
+        }
+    }
+
+    //選択パネルの全削除
+    void Destroy_SentakuMap()
+    {
+        GameObject[] tagobjs = GameObject.FindGameObjectsWithTag("SentakuMap");
+        for (int i = 0; i < tagobjs.Length; i++)
+        {
+            Destroy(tagobjs[i]);
         }
     }
 }
