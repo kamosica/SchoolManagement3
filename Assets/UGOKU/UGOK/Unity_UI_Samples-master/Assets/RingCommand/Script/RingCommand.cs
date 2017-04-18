@@ -7,11 +7,11 @@ public class RingCommand : UIBehaviour, ILayoutController
 	public float radius = 100;
 	public float offsetAngle;
 
-	protected override void OnValidate ()
-	{
-		base.OnValidate ();
-		Arrange ();
-	}
+	//protected override void OnValidate ()
+	//{
+	//	base.OnValidate ();
+	//	Arrange ();
+	//}
 
 	// 要素数が変わると自動的に呼ばれるコールバック
 #region ILayoutController implementation

@@ -44,9 +44,9 @@ public class Coma_Mane1: MonoBehaviour
             if (komasentaku == false)//コマを選択してるか
             {
                 if (Physics.Raycast(ray, out hit, Mathf.Infinity))//ビーム
-                    {
                 {
                     if (hit.collider.gameObject.tag == ("Coma"))//タグがコマで
+                    {
                         clickCUBE = hit.collider.gameObject;//クリックしたオブジェクト
                         coma = clickCUBE.GetComponent<Coma>();
 
@@ -134,16 +134,27 @@ public class Coma_Mane1: MonoBehaviour
                         }
                         komasentaku = false;
                     }
-                    else if(hit.collider.gameObject == clickCUBE)
-                    {
-                        Destroy_SentakuMap();
-
-                        clickCUBE = null;
-                    }
                     else if (hit.collider.gameObject.tag == ("Coma"))//タグがコマで
                     {
-                        clickCUBE = hit.collider.gameObject;//クリックしたオブジェクト
-                        Create_SentakuMap();
+                        if (hit.collider.gameObject == clickCUBE)
+                        {
+                            Destroy_SentakuMap();
+
+                            clickCUBE = null;
+                            komasentaku = false;
+                        }
+                        else
+                        {
+                            GameObject obj = hit.collider.gameObject;//クリックしたオブジェクト
+                            coma = obj.GetComponent<Coma>();
+
+                            if (TurnManager_scr.turn_count % 2 == coma.PalyerNo - 1)
+                            {
+                                clickCUBE = obj;
+                                Create_SentakuMap();
+                                komasentaku = false;
+                            }
+                        }
                     }
 
                     chessmap.Array_Log();
