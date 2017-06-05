@@ -24,6 +24,9 @@ public class Coma_Mane1: MonoBehaviour
 
     int KoudouCount = 0;    //何回行動したかのカウント
 
+    int Map_width = 3 * 2;      //マップの横の大きさ
+    int Map_height = 8 * 2;     //マップの縦の大きさ
+
     // Use this for initialization
     void Start()
     {
@@ -176,7 +179,7 @@ public class Coma_Mane1: MonoBehaviour
         if (coma.isCrush == false)
         {
             //周りのコマチェック。行ける所にオブジェクトが出る
-            if (chessmap.Map_array[(int)comapos.y, (int)comapos.x + 1] == 0 && comapos.x + 1 < 6 && BeforeMove != 1)//右
+            if (chessmap.Map_array[(int)comapos.y, (int)comapos.x + 1] == 0 && comapos.x + 1 < Map_width && BeforeMove != 1)//右
             {
                 PanelMIGI = (GameObject)Instantiate(MapTile, new Vector3(((int)comapos.x + 2) * interval, 1, (int)comapos.y * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
             }
@@ -186,7 +189,7 @@ public class Coma_Mane1: MonoBehaviour
                 PanelHIDARI = (GameObject)Instantiate(MapTile, new Vector3(((int)comapos.x - 2) * interval, 1, (int)comapos.y * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
             }
 
-            if (chessmap.Map_array[(int)comapos.y + 1, (int)comapos.x] == 0 && comapos.y + 1 < 16 && BeforeMove != 3)//上
+            if (chessmap.Map_array[(int)comapos.y + 1, (int)comapos.x] == 0 && comapos.y + 1 < Map_height && BeforeMove != 3)//上
             {
                 PanelUE = (GameObject)Instantiate(MapTile, new Vector3((int)comapos.x * interval, 1, ((int)comapos.y + 2) * interval), Quaternion.Euler(90.0f, 0.0f, 0.0f));
             }
